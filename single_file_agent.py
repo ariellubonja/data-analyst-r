@@ -51,7 +51,7 @@ class RExecutorAgent(BaseChatAgent):
             result = self.run_r_code(r_code)
             return Response(chat_message=TextMessage(content=result, source=self.name))
         else:
-            return Response(chat_message=TextMessage(content="(No R code found in your message.)", source=self.name))
+            return Response(chat_message=TextMessage(content="(No R code found in your message. Start your R code block with ```r and end it with ```)", source=self.name))
 
     def run_r_code(self, code: str) -> str:
         """Run the given R code in a temp file via Rscript. Return 'ERROR:...' or 'SUCCESS:...'."""
@@ -104,17 +104,17 @@ class RCoderAgent(AssistantAgent):
 
         # System prompt: instruct the agent how to do iterative code attempts
         self.system_message = (
-            "You are an R coder agent. You have two subtasks:\n"
-            "1) Load 'dsc.csv' from the local folder. Compute the mean and std dev of the 'aorta' column.\n"
-            "2) Load the 'challengeR' library (if installed) in R, then print its package version.\n\n"
-            "You can produce code in the form:\n"
-            "```r\n# code\n```\n"
-            "to the RExecutor agent. The RExecutor returns either 'SUCCESS:' or 'ERROR:' plus details.\n"
-            "If you see 'ERROR:' in the RExecutor's message, you must fix your code and try again.\n"
-            "Once you have success for both tasks, output a short summary (in plain text, no code) of the results.\n"
-            "Then say 'DONE' to end the chat.\n"
-            "Do not produce code after you have succeeded. If the 'challengeR' library is missing, "
-            "try to handle that gracefully or mention the error.\n"
+            "You are an R coder agent who is guiding an R executor bot which will run your code. The bot will run code it detects in your answer and give you back the results. It will never ask you questions. It is your duty to iteratively write code for the executor to achieve your stated goals. You have two goals:\n"
+            "1) Load 'dsc.csv' from the local folder. Compute the mean and std dev of 'aorta'.\n"
+            "2) Load 'challengeR' library and print its version.\n\n"
+
+            "IMPORTANT:\n"
+            "1. The R executor only understands code in your output when you structure it correctly. So, Always produce exactly ONE fenced code block using the syntax:\n"
+            "```r\n# your code\n```\n"
+            "2. If you have any normal text or explanation, put it outside that single code block.\n"
+            "3. The RExecutor will only run code inside ```r ... ```. If there's no code block, it won't run.\n"
+            "4. If you get an ERROR, refine the code and try again.\n"
+            "5. Once both tasks succeed, produce a plain text summary and say 'DONE'.\n"
         )
 
 
