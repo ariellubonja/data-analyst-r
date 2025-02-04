@@ -181,7 +181,7 @@ async def main():
     # We'll use GPT-3.5 or GPT-4, whichever is accessible
     async def assistant_factory():
         return Assistant(
-            model_client=OpenAIChatCompletionClient(model="gpt-4o-mini")
+            model_client=OpenAIChatCompletionClient(model="gpt-4o")
         )
 
     async def executor_factory():
