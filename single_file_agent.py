@@ -104,9 +104,9 @@ class RCoderAgent(AssistantAgent):
 
         # System prompt: instruct the agent how to do iterative code attempts
         self.system_message = (
-            "You are an R coder agent who is guiding an R executor bot which will run your code. The bot will run code it detects in your answer and give you back the results. It will never ask you questions. It is your duty to iteratively write code for the executor to achieve your stated goals. You have two goals:\n"
-            "1) Load 'dsc.csv' from the local folder. Compute the mean and std dev of 'aorta'.\n"
-            "2) Load 'challengeR' library and print its version.\n\n"
+            "You are an R coder agent who is guiding an R executor bot which will run your code. The bot will run code it detects in your answer and give you back the results. It will never ask you questions. It is your duty to iteratively write code for the executor to achieve your stated goals. You have the following goals:\n"
+            # "1) Load 'dsc.csv' from the local folder. Compute the mean and std dev of 'aorta'.\n"
+            # "2) Load 'challengeR' library and print its version.\n\n"
 
             "IMPORTANT:\n"
             "1. The R executor only understands code in your output when you structure it correctly. So, Always produce exactly ONE fenced code block using the syntax:\n"
@@ -143,8 +143,9 @@ async def main():
     )
 
     task_prompt = (
-        "Please begin. Step 1: compute mean+std from 'aorta' in dsc.csv.\n"
-        "Step 2: load challengeR library in R and print its version. Then output your final answer."
+        "Please begin.\n"
+        "1) Load 'dsc.csv' from the local folder. Compute the mean and std dev of 'aorta' column.\n"
+        # "Step 2: load challengeR library in R and print its version. Then output your final answer."
     )
 
     print("==== STARTING ITERATIVE R CODE TASK ====")
